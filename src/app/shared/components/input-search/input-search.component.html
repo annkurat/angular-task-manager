@@ -1,0 +1,46 @@
+<div class="relative">
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>{{ label }}</mat-label>
+    <input
+      matInput
+      type="text"
+      [placeholder]="placeholder"
+      [formControl]="searchControl"
+      [matAutocomplete]="auto"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+    />
+    <button
+      *ngIf="searchControl.value && !loading"
+      matSuffix
+      mat-icon-button
+      (click)="clear()"
+      type="button"
+      class="clear-button"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+    <mat-progress-spinner
+      *ngIf="loading"
+      matSuffix
+      [diameter]="24"
+      mode="indeterminate"
+      class="ml-2"
+    ></mat-progress-spinner>
+  </mat-form-field>
+
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    (optionSelected)="onSelectItem($event.option.value)"
+  >
+    <ng-container *ngIf="!loading">
+      <mat-option *ngFor="let item of _items" [value]="item">
+        {{ item.title }}
+      </mat-option>
+
+      <mat-option *ngIf="_items.length === 0 && searchControl.value">
+        <div class="text-center py-2 text-gray-500">No items found</div>
+      </mat-option>
+    </ng-container>
+  </mat-autocomplete>
+</div>

@@ -1,0 +1,99 @@
+@use "app/styles" as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+mat-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .toolbar-title {
+    margin-left: 8px;
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+
+  .toolbar-spacer {
+    flex: 1 1 auto;
+  }
+
+  .toolbar-nav {
+    display: flex;
+    gap: 8px;
+
+    a {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      color: white;
+
+      &.active {
+        font-weight: 500;
+        background-color: rgba(255, 255, 255, 0.15);
+      }
+    }
+  }
+}
+
+.app-content {
+  flex: 1;
+  margin-top: 64px;
+  padding: 20px 0;
+  background-color: #f5f5f5;
+  min-height: calc(100vh - 64px);
+
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+}
+
+.app-footer {
+  background-color: #f0f0f0;
+  padding: 16px 0;
+  text-align: center;
+  border-top: 1px solid #e0e0e0;
+
+  p {
+    margin: 0;
+    color: #666;
+    font-size: 0.875rem;
+  }
+}
+
+@include respond-to("md") {
+  .app-content {
+    margin-top: 56px;
+    min-height: calc(100vh - 56px);
+  }
+
+  mat-toolbar {
+    .toolbar-title {
+      font-size: 1.1rem;
+    }
+
+    .toolbar-nav {
+      a {
+        span {
+          display: none;
+        }
+      }
+    }
+  }
+}

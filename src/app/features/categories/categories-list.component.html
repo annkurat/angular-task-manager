@@ -1,0 +1,89 @@
+<div class="p-4">
+  <div class="flex justify-between mb-4 px-4 items-end">
+    <h2 style="margin: 0">Categories</h2>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="openAddDialog()"
+      class="flex items-center"
+    >
+      <mat-icon>add</mat-icon>
+      <span>Add Category</span>
+    </button>
+  </div>
+
+  <div class="flex gap-4 px-4">
+    <mat-form-field class="dense-input no-errors" appearance="outline">
+      <mat-label>Search by title</mat-label>
+      <input
+        matInput
+        [(ngModel)]="searchInput"
+        placeholder="Enter title to search"
+        (keyup.enter)="onSearch()"
+      />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+    <div class="flex gap-2">
+      <button
+        class="action-button"
+        mat-stroked-button
+        color="primary"
+        (click)="onSearch()"
+      >
+        <span>Search</span>
+      </button>
+      <button
+        class="action-button"
+        mat-stroked-button
+        color="warn"
+        (click)="clearFilters()"
+        [disabled]="!searchInput && pageIndex === 0"
+      >
+        <span>Clear</span>
+      </button>
+    </div>
+  </div>
+
+  <app-table
+    [items]="categories"
+    [headers]="headers"
+    [columnFormatters]="columnFormatters"
+    [loading]="isLoading"
+    [pageSize]="pageSize"
+    [totalItems]="totalItems"
+    [pageIndex]="pageIndex"
+    (add)="openAddDialog()"
+    (edit)="editCategory($event)"
+    (delete)="deleteCategory($event)"
+    (pageChange)="onPageChange($event)"
+  ></app-table>
+</div>
+
+<ng-template #categoryFormFields>
+  <form [formGroup]="categoryForm">
+    <mat-form-field appearance="outline" class="w-full form-row">
+      <mat-label>Title</mat-label>
+      <input
+        matInput
+        formControlName="title"
+        placeholder="Enter category title"
+        required
+      />
+      <mat-error *ngIf="categoryForm.get('title')?.hasError('required')">
+        Title is required
+      </mat-error>
+      <mat-error *ngIf="categoryForm.get('title')?.hasError('minlength')">
+        Title must be at least 3 characters
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full form-row">
+      <mat-label>Description</mat-label>
+      <textarea
+        matInput
+        formControlName="description"
+        placeholder="Enter description"
+      ></textarea>
+    </mat-form-field>
+  </form>
+</ng-template>

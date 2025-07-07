@@ -1,0 +1,66 @@
+<div class="table-container">
+  <div *ngIf="loading" class="loading-text">Loading...</div>
+
+  <div *ngIf="!loading && items.length > 0">
+    <table mat-table [dataSource]="items">
+      <ng-container
+        *ngFor="let column of displayedColumns"
+        [matColumnDef]="column"
+      >
+        <th mat-header-cell *matHeaderCellDef>{{ headers[column] }}</th>
+        <td mat-cell *matCellDef="let item">
+          {{ formatCellValue(column, item[column]) }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="actions__header">
+          Actions
+        </th>
+        <td mat-cell *matCellDef="let item" class="actions__cell">
+          <button
+            class="actions__button"
+            mat-icon-button
+            (click)="onEditClick(item)"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            class="actions__button"
+            mat-icon-button
+            color="warn"
+            (click)="onDeleteClick(item.id)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="allColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: allColumns"></tr>
+    </table>
+
+    <mat-paginator
+      [length]="totalItems"
+      [pageSize]="pageSize"
+      [pageIndex]="pageIndex"
+      (page)="onPageChange($event)"
+      showFirstLastButtons
+      aria-label="Paginator"
+    >
+    </mat-paginator>
+  </div>
+
+  <div *ngIf="!loading && items.length === 0" class="no-items">
+    <mat-icon>assignment</mat-icon>
+    <p>No items found</p>
+    <button
+      class="no-items__button"
+      mat-button
+      color="primary"
+      (click)="onAddClick()"
+    >
+      Create new
+    </button>
+  </div>
+</div>

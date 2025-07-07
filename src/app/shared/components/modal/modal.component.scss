@@ -1,0 +1,34 @@
+@use "app/styles" as *;
+
+.dialog {
+  &__title {
+    font-weight: 500;
+    color: black;
+    margin: 0;
+    padding: 0 0 16px 0;
+  }
+
+  &__content {
+    padding: 0;
+  }
+
+  &__form {
+    padding-block: 16px;
+  }
+}
+
+:host ::ng-deep .mat-mdc-dialog-content {
+  padding: 0;
+  margin: 0;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+:host {
+  display: block;
+  padding: 16px 24px;
+}

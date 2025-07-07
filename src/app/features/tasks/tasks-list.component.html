@@ -1,0 +1,184 @@
+<div class="p-4">
+  <div class="flex mb-4 justify-between px-4 items-end">
+    <h2 style="margin: 0">Tasks</h2>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="openAddTaskDialog()"
+      class="flex items-center"
+    >
+      <mat-icon>add</mat-icon>
+      <span>Add Task</span>
+    </button>
+  </div>
+
+  <div class="flex gap-4 px-4">
+    <div class="grid grid-cols-4 gap-4 w-full">
+      <mat-form-field appearance="outline" class="dense-input no-errors">
+        <mat-label>Search by title</mat-label>
+        <input
+          matInput
+          [(ngModel)]="searchInput"
+          placeholder="Enter title to search"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="dense-input no-errors">
+        <mat-label>Start Date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="startPicker"
+          [formControl]="dateRange.controls.start"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="startPicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="dense-input no-errors">
+        <mat-label>End Date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="endPicker"
+          [formControl]="dateRange.controls.end"
+          [min]="dateRange.value.start"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="endPicker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="dense-input no-errors">
+        <mat-label>Status</mat-label>
+        <mat-select multiple [(ngModel)]="selectedStatuses">
+          <mat-option
+            *ngFor="let status of statusOptions"
+            [value]="status.value"
+          >
+            {{ status.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="flex gap-2">
+      <button
+        class="action-button"
+        mat-stroked-button
+        color="primary"
+        (click)="onSearch()"
+      >
+        <span>Search</span>
+      </button>
+      <button
+        class="action-button"
+        mat-stroked-button
+        color="warn"
+        (click)="clearFilters()"
+        [disabled]="
+          !searchInput &&
+          !selectedStatuses.length &&
+          !dateRange.value.start &&
+          !dateRange.value.end
+        "
+      >
+        <span>Clear</span>
+      </button>
+    </div>
+  </div>
+
+  <app-table
+    [items]="tasks"
+    [headers]="headers"
+    [columnFormatters]="columnFormatters"
+    [loading]="isLoading"
+    [pageSize]="pageSize"
+    [totalItems]="totalTasks"
+    [pageIndex]="pageIndex"
+    (add)="openAddTaskDialog()"
+    (edit)="editTask($event)"
+    (delete)="deleteTask($event)"
+    (pageChange)="onPageChange($event)"
+  ></app-table>
+</div>
+
+<ng-template #taskFormFields>
+  <form [formGroup]="taskForm">
+    <div class="form-row">
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Title</mat-label>
+        <input
+          matInput
+          formControlName="title"
+          placeholder="Task title"
+          required
+        />
+        <mat-error *ngIf="taskForm.get('title')?.hasError('required')">
+          Title is required
+        </mat-error>
+        <mat-error *ngIf="taskForm.get('title')?.hasError('minlength')">
+          Title must be at least 3 characters
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea
+          matInput
+          formControlName="description"
+          rows="3"
+          placeholder="Task description"
+        ></textarea>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Due Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="dueDate" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Priority</mat-label>
+        <mat-select formControlName="priority">
+          <mat-option
+            *ngFor="let priority of priorities"
+            [value]="priority.value"
+          >
+            {{ priority.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="w-full" appearance="outline">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option value="todo">To Do</mat-option>
+          <mat-option value="in_progress">In Progress</mat-option>
+          <mat-option value="done">Done</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <app-input-search
+      [label]="'Category'"
+      [placeholder]="'Search categories...'"
+      [items]="categories"
+      [loading]="loadingCategories"
+      [selectedItem]="selectedCategory"
+      (search)="onCategorySearch($event)"
+      (selected)="onFormCategorySelected($event)"
+      (cleared)="onFormCategoryClear()"
+      class="w-full"
+    />
+  </form>
+</ng-template>

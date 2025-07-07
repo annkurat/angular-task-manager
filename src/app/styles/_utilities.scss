@@ -1,0 +1,87 @@
+@use "@angular/material" as mat;
+
+.w-full {
+  width: 100%;
+}
+
+.items-end {
+  align-items: end;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.grid {
+  display: grid;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.flex {
+  display: flex;
+}
+
+.px-4 {
+  padding-inline: 1rem;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.h-small {
+  height: 56px;
+}
+
+.action-button {
+  --mdc-outlined-button-container-height: 100%;
+  --mdc-text-button-container-height: 100%;
+  height: 100%;
+  padding: 0 16px;
+
+  .mdc-button__label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+  .mat-mdc-button-touch-target {
+    height: 100% !important;
+  }
+}
+
+.dense-input {
+  @include mat.form-field-density(-2);
+
+  &.no-errors {
+    .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
+
+    .mat-mdc-form-field-bottom-align::before {
+      display: none;
+    }
+  }
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.form-row {
+  display: flex;
+  column-gap: 8px;
+  margin-bottom: 6px;
+}
